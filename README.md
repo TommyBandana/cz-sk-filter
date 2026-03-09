@@ -39,13 +39,72 @@ You should see:
   Manifest (free): http://127.0.0.1:7000/manifest.json
 ```
 
-### Step 3 — Install in Stremio
+### Step 3 — Create an HTTPS tunnel
 
-1. Open `http://127.0.0.1:7000` in your browser
+Stremio requires an HTTPS address — it cannot install addons from `http://127.0.0.1`. You need to create a free HTTPS tunnel to your local server.
+
+**Download and run Cloudflare Tunnel:**
+
+```bash
+# macOS (Intel)
+curl -sL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-darwin-amd64.tgz -o /tmp/cloudflared.tgz && tar -xzf /tmp/cloudflared.tgz -C /tmp/
+
+# macOS (Apple Silicon / M1, M2, M3)
+curl -sL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-darwin-arm64.tgz -o /tmp/cloudflared.tgz && tar -xzf /tmp/cloudflared.tgz -C /tmp/
+
+# Windows — download from:
+# https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe
+
+# Linux
+curl -sL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o /tmp/cloudflared && chmod +x /tmp/cloudflared
+```
+
+**Start the tunnel** (in a new terminal window, keep the first one running):
+
+```bash
+/tmp/cloudflared tunnel --url http://127.0.0.1:7000
+```
+
+After a few seconds you'll see something like:
+
+```
+Your quick Tunnel has been created! Visit it at:
+https://some-random-words.trycloudflare.com
+```
+
+Copy that HTTPS URL — you'll need it in the next step.
+
+> **Note:** The tunnel URL changes every time you restart `cloudflared`. If you restart it, you'll need to re-install the addon in Stremio with the new URL.
+
+### Step 4 — Install in Stremio
+
+1. Open your tunnel URL in a browser (e.g. `https://some-random-words.trycloudflare.com`) — you should see the configure page
 2. Optionally enter your RealDebrid API key (from [real-debrid.com/apitoken](https://real-debrid.com/apitoken))
 3. Click **Install in Stremio** — Stremio opens and asks you to confirm
 
-> **Note:** The addon must be running (`npm start`) whenever you use Stremio. If you close the terminal, the addon stops.
+> **If the "Install in Stremio" button doesn't work**, go to **Stremio → Addons** (puzzle icon), paste the manifest URL into the search field and click Install:
+> ```
+> https://some-random-words.trycloudflare.com/manifest.json
+> ```
+
+---
+
+## Running the addon
+
+Every time you want to use the addon, you need **two terminal windows** running:
+
+**Terminal 1 — addon server:**
+```bash
+cd cz-sk-filter
+npm start
+```
+
+**Terminal 2 — HTTPS tunnel:**
+```bash
+/tmp/cloudflared tunnel --url http://127.0.0.1:7000
+```
+
+If you close either of these, the addon stops working in Stremio.
 
 ---
 
@@ -89,20 +148,23 @@ Streams are matched by:
 
 To use it:
 1. Get your API key from [real-debrid.com/apitoken](https://real-debrid.com/apitoken)
-2. Paste it in the configure page (`http://127.0.0.1:7000`) before installing
+2. Paste it in the configure page before installing
 
 ---
 
 ## Troubleshooting
 
 **Addon not showing in the stream dropdown?**
-The title has no CZ/SK dubbed streams on Torrentio. Try a different title.
+That title has no CZ/SK dubbed streams on Torrentio. Try a different title.
 
 **"CZ/SK Dubbing Filter" not in my addons list?**
-Re-install from `http://127.0.0.1:7000`. Make sure you clicked "Install in Stremio" and confirmed.
+Re-install from the configure page (your tunnel URL). Make sure you clicked "Install in Stremio" and confirmed.
 
 **Addon stopped working?**
-Make sure the server is still running (`npm start` in the terminal). The addon only works while the server is running.
+Make sure both `npm start` and `cloudflared tunnel` are running. If you restarted `cloudflared`, the URL changed — re-install the addon with the new URL.
+
+**"Install in Stremio" button doesn't work in browser?**
+Manually go to Stremio → Addons → paste the manifest URL (`https://your-tunnel-url.trycloudflare.com/manifest.json`) and click Install.
 
 **RealDebrid not working?**
 Double-check your API key at [real-debrid.com/apitoken](https://real-debrid.com/apitoken) and re-install with the correct key.
