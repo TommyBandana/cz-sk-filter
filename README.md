@@ -1,133 +1,95 @@
-# 🇨🇿🇸🇰 CZ/SK Dubbing Filter — Stremio Addon
+# CZ/SK Dubbing Filter — Stremio Addon
 
 Stremio addon that filters [Torrentio](https://torrentio.strem.fun/) streams to **only show Czech and Slovak dubbed content**.
 
-Supports both free (direct torrent) and [RealDebrid](https://real-debrid.com/) streaming.
+Runs locally on your computer. Supports both free (direct torrent) and [RealDebrid](https://real-debrid.com/) streaming.
 
 ---
 
-## Deploy to Cloudflare Workers (free, recommended)
+## Requirements
 
-Cloudflare Workers are free (100k requests/day), always-on, and globally fast.
+- [Node.js](https://nodejs.org) (version 14 or newer)
+- [Stremio](https://www.stremio.com/) desktop app
+- [Torrentio](https://torrentio.strem.fun/) addon installed in Stremio
 
-### Step 1 — Create a free Cloudflare account
+---
 
-Go to [cloudflare.com](https://cloudflare.com) and sign up. No credit card needed.
+## Installation
 
-### Step 2 — Install Wrangler (Cloudflare's CLI)
-
-Make sure you have [Node.js](https://nodejs.org) installed, then run:
-
-```bash
-npm install -g wrangler
-```
-
-### Step 3 — Log in to Cloudflare
+### Step 1 — Download and install
 
 ```bash
-wrangler login
-```
-
-This opens a browser window. Click **Allow** to authorize Wrangler.
-
-### Step 4 — Deploy
-
-```bash
+git clone https://github.com/TommyBandana/cz-sk-filter.git
 cd cz-sk-filter
-wrangler deploy
+npm install
 ```
 
-After about 10 seconds you'll see:
+### Step 2 — Start the addon
+
+```bash
+npm start
+```
+
+You should see:
 
 ```
-✅ Deployed to: https://cz-sk-filter.YOUR-SUBDOMAIN.workers.dev
+🇨🇿🇸🇰  CZ/SK Dubbing Filter running
+
+  Configure page : http://127.0.0.1:7000/
+  Manifest (free): http://127.0.0.1:7000/manifest.json
 ```
 
-That URL is your addon. Anyone can use it — share it freely.
+### Step 3 — Install in Stremio
 
-### Step 5 — Install in Stremio
-
-1. Open your worker URL in a browser (e.g. `https://cz-sk-filter.YOUR-SUBDOMAIN.workers.dev`)
+1. Open `http://127.0.0.1:7000` in your browser
 2. Optionally enter your RealDebrid API key (from [real-debrid.com/apitoken](https://real-debrid.com/apitoken))
 3. Click **Install in Stremio** — Stremio opens and asks you to confirm
 
+> **Note:** The addon must be running (`npm start`) whenever you use Stremio. If you close the terminal, the addon stops.
+
 ---
 
-## How to test if it's working in Stremio
-
-### Where to find the addon in Stremio
-
-After installing, the addon shows up as a **separate source** in the stream picker.
-
-**Step-by-step:**
+## How to use in Stremio
 
 1. Open Stremio and search for any movie or series
 2. Click on it to open the detail page
 3. Click the **play button** or **Streams** tab
 4. You'll see a **dropdown at the top** that says **"All"** — click it
-5. You should see **"CZ/SK Dubbing Filter"** listed alongside your other addons (Torrentio, etc.)
-6. Select it to see only CZ/SK dubbed streams
+5. Select **"CZ/SK Dubbing Filter"** to see only CZ/SK dubbed streams
 
-> **If it doesn't appear in the dropdown:** That title has no Czech or Slovak dubbed streams available on Torrentio. Try a popular Czech or Slovak movie/show instead.
-
-### Quick test — movies known to have CZ/SK streams
-
-These titles reliably have Czech/Slovak dubbed content on Torrentio:
-
-- Search for **"Hra o trůny"** or any popular Hollywood blockbuster
-- Look for streams labeled `🇨🇿`, `[CZ]`, `CZ dabing`, or `CZSK`
+> **If it doesn't appear in the dropdown:** That title has no Czech or Slovak dubbed streams on Torrentio. Try a popular Hollywood blockbuster — those usually have CZ/SK dubs.
 
 ### Verify the addon is installed
 
-Go to **Stremio → Addons** (puzzle icon). You should see **CZ/SK Dubbing Filter** in the list with a purple icon.
+Go to **Stremio → Addons** (puzzle icon). You should see **CZ/SK Dubbing Filter** in the list.
 
 ---
 
 ## How it works
 
 ```
-Stremio → CZ/SK Filter → Torrentio API
-               ↓
-   Filters streams by CZ/SK keywords,
-   flags 🇨🇿🇸🇰, and Czech/Slovak diacritics
-               ↓
-   Returns only matching streams to Stremio
+Stremio → CZ/SK Filter (local) → Torrentio API
+                 ↓
+     Filters streams by CZ/SK keywords,
+     flags, and Czech/Slovak diacritics
+                 ↓
+     Returns only matching streams to Stremio
 ```
 
 Streams are matched by:
-- Keywords: `CZ`, `SK`, `CZSK`, `[CZ]`, `(CZ)`, `czech`, `slovak`, `česky`, `slovensky`, `dabing`, `dabovano`, …
+- Keywords: `CZ`, `SK`, `CZSK`, `[CZ]`, `(CZ)`, `czech`, `slovak`, `dabing`, `dabovano`, ...
 - Flags: 🇨🇿 🇸🇰
-- Diacritics in stream names: `ř`, `ů`, `ě`, `ň`, `ť`, `ď`, `ä`, `ô`, `ŕ`, `ĺ`
+- Czech/Slovak diacritics: `ř`, `ů`, `ě`, `ň`, `ť`, `ď`, `ä`, `ô`, `ŕ`, `ĺ`
 
 ---
 
-## RealDebrid vs. free
+## RealDebrid (optional)
 
-| | Free (no debrid) | With RealDebrid |
-|---|---|---|
-| Speed | Depends on seeders | Instant (cached) |
-| Quality | Variable | HD, stable |
-| Cost | Free | ~€3/month |
-| Setup | Just install | Paste API key |
+[RealDebrid](https://real-debrid.com/) (~€3/month) gives you instant cached streams instead of slow direct torrents.
 
----
-
-## Running locally (for developers)
-
-```bash
-git clone https://github.com/TommyBandana/cz-sk-filter.git
-cd cz-sk-filter
-npm install
-npm start
-```
-
-Then open `http://127.0.0.1:7000` in your browser and follow the configure page.
-
-**With RealDebrid locally:**
-
-```bash
-TORRENTIO_URL="https://torrentio.strem.fun/realdebrid=YOUR_API_KEY" npm start
-```
+To use it:
+1. Get your API key from [real-debrid.com/apitoken](https://real-debrid.com/apitoken)
+2. Paste it in the configure page (`http://127.0.0.1:7000`) before installing
 
 ---
 
@@ -137,7 +99,10 @@ TORRENTIO_URL="https://torrentio.strem.fun/realdebrid=YOUR_API_KEY" npm start
 The title has no CZ/SK dubbed streams on Torrentio. Try a different title.
 
 **"CZ/SK Dubbing Filter" not in my addons list?**
-Re-install from the configure page. Make sure you clicked "Install in Stremio" and confirmed in the popup.
+Re-install from `http://127.0.0.1:7000`. Make sure you clicked "Install in Stremio" and confirmed.
+
+**Addon stopped working?**
+Make sure the server is still running (`npm start` in the terminal). The addon only works while the server is running.
 
 **RealDebrid not working?**
 Double-check your API key at [real-debrid.com/apitoken](https://real-debrid.com/apitoken) and re-install with the correct key.

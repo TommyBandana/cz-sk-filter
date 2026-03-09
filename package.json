@@ -23,7 +23,6 @@
   "dependencies": {
     "cors": "^2.8.6",
     "express": "^5.2.1",
-    "node-fetch": "^2.7.0",
-    "stremio-addon-sdk": "^1.6.10"
+    "node-fetch": "^2.7.0"
   }
 }
