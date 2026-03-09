@@ -81,7 +81,10 @@ async function fetchFilteredStreams(rdKey, type, id) {
   console.log(`[CZ/SK Filter] Fetching: ${url}`);
 
   try {
-    const res = await fetch(url, { timeout: 15000 });
+    const res = await fetch(url, {
+      timeout: 15000,
+      headers: { 'User-Agent': 'CZSKFilter/1.0 Stremio-Addon' },
+    });
     if (!res.ok) throw new Error(`Torrentio ${res.status}`);
     const data = await res.json();
     const streams = data.streams || [];
@@ -89,7 +92,7 @@ async function fetchFilteredStreams(rdKey, type, id) {
     console.log(`[CZ/SK Filter] ${filtered.length}/${streams.length} CZ/SK streams found`);
     return filtered;
   } catch (err) {
-    console.error('[CZ/SK Filter] Error:', err.message);
+    console.error(`[CZ/SK Filter] Error fetching ${url}:`, err.message);
     return [];
   }
 }
