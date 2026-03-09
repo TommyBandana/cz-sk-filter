@@ -10,13 +10,37 @@ const VALID_ID = /^tt\d+(:\d+:\d+)?$/;
 
 // --- CZ/SK detection ---
 const CZ_SK_KEYWORDS = [
-  'CZ', 'SK',
+  // Basic language codes
+  'CZ', 'SK', 'CZSK', 'CZ-SK', 'CZ+SK',
+
+  // Bracketed / parenthesised tags common in torrent names
+  '[CZ]', '(CZ)', '[SK]', '(SK)',
+
+  // Full language names
   'czech', 'slovak',
   'česky', 'slovensky',
+
+  // Dubbing — English variants
   'cz dub', 'sk dub',
   'cz dabing', 'sk dabing',
   'czech dub', 'slovak dub',
   'czech dubbed', 'slovak dubbed',
+
+  // Dubbing — Czech/Slovak words
+  'dabing',        // standalone (covers "dabing CZ", "CZ dabing", etc.)
+  'dabovano',      // "dubbed" in Czech
+  'dabovany',      // grammatical variant
+  'dabované',      // grammatical variant
+
+  // Audio-specific tags
+  'cz audio', 'sk audio',
+  'czech audio', 'slovak audio',
+
+  // Common torrent release naming: quality.LANG
+  'WEBRip.CZ', 'BluRay.CZ',
+  'WEBRip.SK', 'BluRay.SK',
+
+  // Flags
   '🇨🇿', '🇸🇰',
 ];
 const CZ_SK_DIACRITICS = /[řůěňťďäôŕĺ]/;
