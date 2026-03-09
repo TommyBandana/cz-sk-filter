@@ -233,25 +233,6 @@ app.disable('x-powered-by');
 app.get('/', (_req, res) => res.send(CONFIGURE_HTML));
 app.get('/configure', (_req, res) => res.send(CONFIGURE_HTML));
 
-// Debug endpoint — shows raw Torrentio response (remove after testing)
-app.get('/debug/:type/:id.json', async (req, res) => {
-  const { type, id } = req.params;
-  if (!VALID_TYPES.has(type) || !VALID_ID.test(id)) {
-    return res.status(400).json({ error: 'Invalid input' });
-  }
-  const url = `https://torrentio.strem.fun/stream/${type}/${encodeURIComponent(id)}.json`;
-  try {
-    const r = await fetch(url, {
-      timeout: 15000,
-      headers: { 'User-Agent': 'CZSKFilter/1.0 Stremio-Addon' },
-    });
-    const text = await r.text();
-    res.json({ status: r.status, headers: Object.fromEntries(r.headers.entries()), bodyLength: text.length, bodyPreview: text.slice(0, 500) });
-  } catch (err) {
-    res.json({ error: err.message });
-  }
-});
-
 // ── Routes WITHOUT debrid ──────────────────────────────────────────────────
 app.get('/manifest.json', (_req, res) => {
   res.json(buildManifest(null));
