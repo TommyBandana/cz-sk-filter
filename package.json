@@ -1,0 +1,19 @@
+{
+  "name": "cz-sk-filter",
+  "version": "1.0.0",
+  "description": "Stremio addon that filters Torrentio streams to show only Czech and Slovak dubbed content.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": ["stremio", "addon", "czech", "slovak", "dubbing", "torrentio", "filter"],
+  "license": "MIT",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0",
+    "stremio-addon-sdk": "^1.6.10"
+  }
+}
