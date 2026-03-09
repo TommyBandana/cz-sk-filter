@@ -6,13 +6,23 @@
   "scripts": {
     "start": "node index.js"
   },
-  "keywords": ["stremio", "addon", "czech", "slovak", "dubbing", "torrentio", "filter"],
+  "keywords": [
+    "stremio",
+    "addon",
+    "czech",
+    "slovak",
+    "dubbing",
+    "torrentio",
+    "filter"
+  ],
   "license": "MIT",
   "type": "commonjs",
   "engines": {
     "node": ">=14.0.0"
   },
   "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
     "node-fetch": "^2.7.0",
     "stremio-addon-sdk": "^1.6.10"
   }
